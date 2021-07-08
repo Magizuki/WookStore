@@ -35,7 +35,48 @@ router.route('/addNewCart').post((req, res) => {
         }
     })
 
-    
+})
+
+router.route('/getUserCartList').post((req, res) => {
+    Cart.find({userID: req.body.userID, isPaid: false})
+    .then(cart => {
+        res.json(cart)
+    }).catch(err => {
+        err = "Error when processing in database"
+        res.status(400).json({message: err})
+    })
+
+})
+
+router.route('/removeAllCart').post((req, res) => {
+    Cart.remove({userID: req.body.userID, isPaid: false})
+    .then(() => {
+        res.json({message: "All Cart Removed"})
+    }).catch(err => {
+        err = "Error when processing in database"
+        res.status(400).json({message: err})
+    })
+})
+
+router.route('/removeCart').post((req, res) => {
+    Cart.remove({userID: req.body.userID, bookID: req.body.bookID, isPaid: false})
+    .then(() => {
+        res.json({message: "All Cart Removed"})
+    }).catch(err => {
+        err = "Error when processing in database"
+        res.status(400).json({message: err})
+    })
+})
+
+router.route('/updatePaidStatus').post((req, res) => {
+
+    Cart.updateMany({userID: req.body.userID, isPaid: false}, {$set: {isPaid: true}})
+    .then(() => {
+        res.json({message: "Payment Success"})
+    }).catch(err => {
+        err = "Error when processing in database"
+        res.status(400).json({message: err})
+    })
 
 })
 
