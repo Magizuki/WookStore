@@ -66,7 +66,7 @@ class User extends Component {
 
         return (
             <React.Fragment>
-                <Link to="/" className="navbar-brand ms-3" style={{color: "white"}}>Cart</Link>
+                <Link to="/cart" className="navbar-brand ms-3" style={{color: "white"}}>Cart</Link>
                 <label className="navbar-brand ms-3" onClick={this.logout} style={{color: "white", cursor: "pointer"}}>Logout</label>
             </React.Fragment>
         )

@@ -9,7 +9,7 @@ router.route('/addNewCart').post((req, res) => {
         console.log(cart)
         if(cart != null)
         {
-            cart.quantity = cart.quantity + req.body.quantity
+            cart.quantity = parseInt(cart.quantity) + parseInt(req.body.quantity)
             cart.save().then(() => {
                 res.json({message: "success update cart"})
             }).catch(err => {
@@ -40,6 +40,7 @@ router.route('/addNewCart').post((req, res) => {
 router.route('/getUserCartList').post((req, res) => {
     Cart.find({userID: req.body.userID, isPaid: false})
     .then(cart => {
+        console.log(cart.length)
         res.json(cart)
     }).catch(err => {
         err = "Error when processing in database"
@@ -59,9 +60,9 @@ router.route('/removeAllCart').post((req, res) => {
 })
 
 router.route('/removeCart').post((req, res) => {
-    Cart.remove({userID: req.body.userID, bookID: req.body.bookID, isPaid: false})
+    Cart.remove({_id: req.body.id})
     .then(() => {
-        res.json({message: "All Cart Removed"})
+        res.json({message: "Cart Removed"})
     }).catch(err => {
         err = "Error when processing in database"
         res.status(400).json({message: err})

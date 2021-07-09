@@ -7,6 +7,7 @@ import Register from './Register';
 import Login from './Login';
 import Home from './Home';
 import Detail from './Detail'
+import Cart from './Cart'
 import {
   BrowserRouter as Router,
   Route,
@@ -22,6 +23,7 @@ ReactDOM.render(
            <Route exact path="/Register" component={Register} />
            <Route exact path="/Login" component={Login} />
            <Route exact path="/detailBook" component={Detail} />
+           <Route exact path="/cart" component={Cart} />
         </Switch>
     </Router>
   </React.StrictMode>,
