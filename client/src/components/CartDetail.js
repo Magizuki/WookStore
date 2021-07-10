@@ -2,7 +2,8 @@ import React, { Component } from "react"
 import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import {
     Link
-  } from 'react-router-dom';
+} from 'react-router-dom';
+import { Redirect } from "react-router";
 
 class CartDetail extends Component{
 
@@ -16,7 +17,8 @@ class CartDetail extends Component{
             price: '',
             bookID: '',
             quantity: '',
-            redirect: ''
+            redirect: '',
+            view: ''
         }
     }
 
@@ -34,16 +36,7 @@ class CartDetail extends Component{
         }).then(res => {
             return res.json()
         }).then(data => {
-            this.setState({
-                id: '',
-                bookName: '',
-                img: '',
-                author: '',
-                price: '',
-                bookID: '',
-                quantity: '',
-                redirect: ''
-            })
+            this.setState({view: '', redirect: '/cart'})
             console.log(data.message)
         })
     }
@@ -52,14 +45,8 @@ class CartDetail extends Component{
         return {id: props.id, bookName: props.bookName, img: props.img, author: props.author, price: props.price, quantity: props.quantity, bookID: props.bookID}
     }
 
-    render(){
-
-        if(this.state.id === '')
-        {
-            return null
-        }
-        
-        return(
+    componentDidMount(){
+        this.setState({view: (
             <React.StrictMode>
                 <li className="list-group-item">
                     <div className="row">
@@ -85,7 +72,16 @@ class CartDetail extends Component{
                     </div>
                 </li>
             </React.StrictMode>
-        )   
+        )})
+    }
+
+    render(){
+
+        if(this.state.redirect){
+            return <Redirect to={this.state.redirect} />
+        }
+        
+        return this.state.view
     }
 }
 

@@ -1,15 +1,25 @@
 const express = require('express')
 let User = require('../models/user')
-const router = express.Router();
+const router = express.Router()
+const bcrypt = require('bcrypt')
 
 
-router.route('/register').post( (req, res) => {
+router.route('/register').post( async (req, res) => {
+
+  //Generate the salt
+  //const salt = await bcrypt.genSalt(saltRounds)
+
+  const saltRounds = 10
+
+  //Hash the password
+  const hashPassword = await bcrypt.hash(req.body.pass, saltRounds)
+
   const user = new User({
     email: req.body.email,
     username: req.body.username,
     name: req.body.name,
     phonenumber: req.body.phonenumber,
-    password: req.body.pass
+    password: hashPassword
   })
 
   user.save().then(() => {
@@ -24,20 +34,27 @@ router.route('/register').post( (req, res) => {
 });
 
   router.route('/login').post((req, res) => {
-    User.findOne({username: req.body.username, password: req.body.pass})
-    .then((user) => {
+    User.find({username: req.body.username})
+    .then(async (user) => {
       console.log(user)
-      if(user != null)
+      for(let i = 0; user.length; i++)
       {
-        // Buat session baru
-        req.session.username = user.username
-        req.session.name = user.name
-        req.session.id = user._id
-        res.json({username: req.session.username, name: req.session.name, id: req.session.id})
+        var isMatch = await bcrypt.compare(req.body.pass, user[i].password)
+        console.log(isMatch)
+        if(isMatch)
+        {
+          console.log(1)
+          // Buat session baru
+          req.session.username = user[i].username
+          req.session.name = user[i].name
+          req.session.id = user[i]._id
+          res.json({username: req.session.username, name: req.session.name, id: req.session.id})
+          break
+        }
       }
-      else{
+      
         res.json({message: "user not found"})
-      }
+      
       //res.json(user)
     }).catch(err => {
       err = "Error in database process"

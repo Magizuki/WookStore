@@ -27,7 +27,7 @@ class Cart extends Component{
             </React.StrictMode>
         ), title: "Purchase Page", totalPriceLbl: <strong style={{color: "red"}}>{"Total Price: Rp. " + this.state.totalPrice}</strong>})
     }
-
+    
     doRemoveAll = () => {
         this.setState({cartView: "No Cart Data"})
         fetch("http://localhost:9000/carts/removeAllCart", {
